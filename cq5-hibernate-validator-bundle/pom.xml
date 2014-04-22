@@ -1,0 +1,203 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>cq5-hibernate-validator</artifactId>
+    <groupId>com.webnid</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <name>cq5-hibernate-validator-Bundle</name>
+  <artifactId>cq5-hibernate-validator-bundle</artifactId>
+  <version>${package-version}</version>
+  <packaging>bundle</packaging>
+	
+  <build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>auto-clean</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-scr-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-scr-descriptor</id>
+						<goals>
+							<goal>scr</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+				 	<obrRepository>${obr.repository.path}</obrRepository>
+					<instructions>
+						<Bundle-Category>webnid-hibernate-validator</Bundle-Category>
+						<Bundle-SymbolicName>com.webnid.hibernate-validator</Bundle-SymbolicName>
+						<Bundle-Vendor>MIND</Bundle-Vendor>
+						<Export-Package>
+							com.webnid.hibernate-validator.*,
+							javax.validation.*,
+							org.hibernate.*,
+							com.ctc.wstx.stax.*
+						</Export-Package>
+						<Bundle-Activator>com.webnid.hibernate-validator.utils.Activator</Bundle-Activator>
+						<Import-Package>
+							*;resolution:=optional,
+							org.osgi.framework;version="1.0.0",
+							javax.servlet,
+							***
+						</Import-Package>
+						<Embed-Dependency>
+							hibernate-validator,
+							javax.el-api,
+							javax.el,	
+							validation-api,
+							xml-apis,
+							wstx,
+							*;scope=compile|runtime
+						</Embed-Dependency>
+						<Embed-Transitive>true</Embed-Transitive>
+						<Embed-Directory>OSGI-INF/lib</Embed-Directory>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.sling</groupId>
+				<artifactId>maven-sling-plugin</artifactId>
+				<executions>
+					<!--execution>
+						<id>uninstall-bundle-from-cq</id>
+						<phase>install</phase>
+			            <goals>
+			              <goal>uninstall</goal>
+			            </goals>
+			            <configuration>
+							<slingUrl>${crx.url}/system/console/install</slingUrl>
+							<user>${crx.user}</user>
+							<password>${crx.password}</password>
+							<sources>
+								<source>${project.build.directory}/generated-sources/java/</source>
+							</sources>
+						</configuration>
+			        </execution -->
+					<execution>
+						<id>deploy-to-cq</id>
+						<phase>install</phase>
+						<goals>
+							<goal>install</goal>
+						</goals>
+						<configuration>
+							<refreshPackages>true</refreshPackages>
+							<slingUrl>${crx.url}/system/console/install</slingUrl>
+							<user>${crx.user}</user>
+							<password>${crx.password}</password>
+							<bundleStartLevel>22</bundleStartLevel>
+							<sources>
+								<source>${project.build.directory}/generated-sources/java/</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-clean-plugin
+										</artifactId>
+										<versionRange>
+											[2.4.1,)
+										</versionRange>
+										<goals>
+											<goal>clean</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+    <dependencies>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.2.2</version>
+            <type>jar</type>
+        </dependency>
+<!--         <dependency> -->
+<!--             <groupId>com.day.sling</groupId> -->
+<!--             <artifactId>log</artifactId> -->
+<!--             <version>1.0.0</version> -->
+<!--             <scope>test</scope> -->
+<!--         </dependency> -->
+        <dependency>
+            <groupId>org.apache.jackrabbit</groupId>
+            <artifactId>jackrabbit-jcr2dav</artifactId>
+            <version>2.7.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.4</version>
+            <type>jar</type>
+        </dependency>
+<dependency>
+   <groupId>org.hibernate</groupId>
+   <artifactId>hibernate-validator</artifactId>
+   <version>5.1.0.Final</version>
+</dependency>
+<dependency>
+   <groupId>javax.el</groupId>
+   <artifactId>javax.el-api</artifactId>
+   <version>2.2.4</version>
+</dependency>
+<dependency>
+   <groupId>org.glassfish.web</groupId>
+   <artifactId>javax.el</artifactId>
+   <version>2.2.4</version>
+</dependency>
+<dependency>
+	<groupId>javax.validation</groupId>
+	<artifactId>validation-api</artifactId>
+	<version>1.1.0.Final</version>
+</dependency>
+        <dependency>
+            <groupId>wstx</groupId>
+            <artifactId>wstx</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
+</project>
